@@ -38,13 +38,3 @@
     path: "{{ ai_agent_workspace }}"
     state: directory
     mode: '0755'
-
-- name: Configure firewall (allow SSH)
-  ufw:
-    rule: allow
-    port: '22'
-    proto: tcp
-
-- name: Enable firewall
-  ufw:
-    state: enabled
