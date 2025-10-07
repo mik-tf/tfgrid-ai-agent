@@ -1,4 +1,4 @@
-.PHONY: help init deploy infrastructure ansible wireguard wg inventory address connect ping clean verify \
+.PHONY: help init deploy quick infrastructure ansible wireguard wg inventory address connect ping clean verify \
         login create run stop monitor list git-setup git-key \
         login-qwen create-project run-project monitor-project stop-project list-projects git-show-key
 
@@ -19,6 +19,7 @@ help:
 	@echo ""
 	@echo "📋 Infrastructure Commands:"
 	@echo "  make infrastructure      - Deploy VM on ThreeFold Grid"
+	@echo "  make quick               - Retry config (wireguard + inventory + ansible)"
 	@echo "  make wireguard (or wg)   - Setup WireGuard connection"
 	@echo "  make inventory           - Generate Ansible inventory"
 	@echo "  make ansible             - Configure VM with Ansible"
@@ -78,6 +79,15 @@ inventory:
 ansible:
 	@echo "🔧 Configuring AI agent VM with Ansible..."
 	@cd platform && ansible-playbook -i inventory.ini site.yml
+
+# Quick retry (skip infrastructure deployment)
+quick: wireguard inventory ansible
+	@echo "✅ Configuration complete!"
+	@echo ""
+	@echo "Next steps:"
+	@echo "  1. Login to Qwen: make login"
+	@echo "  2. Create project: make create project=my-app"
+	@echo "  3. Run Agent: make run project=my-app"
 
 # Show all addresses
 address:
