@@ -28,7 +28,8 @@ cd infrastructure
 
 # Get WireGuard configuration
 echo "📝 Extracting WireGuard configuration..."
-$TF_CMD output -json wg_config | jq -r '.config' > ../wg-ai-agent.conf
+terraform_output=$($TF_CMD show -json)
+echo "$terraform_output" | jq -r '.values.outputs.wg_config.value' > ../wg-ai-agent.conf
 
 cd ..
 

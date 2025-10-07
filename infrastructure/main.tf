@@ -110,7 +110,7 @@ resource "grid_deployment" "ai_agent" {
     flist            = "https://hub.grid.tf/tf-official-vms/ubuntu-24.04-full.flist"
     cpu              = var.ai_agent_cpu
     memory           = var.ai_agent_mem
-    rootfs_size      = var.ai_agent_disk * 1024 * 1024 * 1024
+    rootfs_size      = var.ai_agent_disk * 1024  # Convert GB to MB
     entrypoint       = "/sbin/zinit init"
     planetary        = true
     env_vars = {
@@ -129,7 +129,7 @@ output "ai_agent_node_id" {
 }
 
 output "ai_agent_wg_ip" {
-  value       = jsondecode(grid_network.ai_agent_network.access_wg_config).peers[0].allowed_ips[0]
+  value       = regex("Address = ([0-9.]+)", grid_network.ai_agent_network.access_wg_config)[0]
   description = "AI Agent VM WireGuard IP address"
 }
 
