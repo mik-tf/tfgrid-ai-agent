@@ -149,9 +149,9 @@ make stop-project project=my-app
 │  Local Machine  │         │   ThreeFold Grid     │
 │                 │         │                      │
 │  • OpenTofu     │────────▶│  ┌────────────────┐  │
-│  • Ansible      │         │  │  AI agent VM      │  │
+│  • Ansible      │         │  │  AI agent VM   │  │
 │  • Makefile     │         │  │                │  │
-│  • Scripts      │         │  │  • ai-agent  │  │
+│  • Scripts      │         │  │  • ai-agent    │  │
 │                 │         │  │  • Node.js     │  │
 │  WireGuard VPN  │◀───────▶│  │  • Qwen CLI    │  │
 │                 │         │  │  • Git repos   │  │
