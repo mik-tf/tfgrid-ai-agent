@@ -129,7 +129,7 @@ output "ai_agent_node_id" {
 }
 
 output "ai_agent_wg_ip" {
-  value       = grid_network.ai_agent_network.access_wg_config.peers[0].allowed_ips[0]
+  value       = jsondecode(grid_network.ai_agent_network.access_wg_config).peers[0].allowed_ips[0]
   description = "AI Agent VM WireGuard IP address"
 }
 
