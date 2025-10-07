@@ -1,4 +1,4 @@
-.PHONY: help init deploy quick infrastructure ansible wireguard wg inventory address connect ping clean verify \
+.PHONY: help init deploy quick infrastructure ansible wireguard wg inventory wait-ssh address connect ping clean verify \
         login create run stop monitor list git-setup git-key \
         login-qwen create-project run-project monitor-project stop-project list-projects git-show-key
 
@@ -22,6 +22,7 @@ help:
 	@echo "  make quick               - Retry config (wireguard + inventory + ansible)"
 	@echo "  make wireguard (or wg)   - Setup WireGuard connection"
 	@echo "  make inventory           - Generate Ansible inventory"
+	@echo "  make wait-ssh            - Wait for SSH to become ready"
 	@echo "  make ansible             - Configure VM with Ansible"
 	@echo "  make clean               - Destroy all infrastructure"
 	@echo "  make verify              - Verify deployment status"
@@ -52,7 +53,7 @@ init:
 	@bash scripts/init-env.sh
 
 # Complete deployment
-deploy: infrastructure wireguard inventory ansible
+deploy: infrastructure wireguard inventory wait-ssh ansible
 	@echo "✅ Deployment complete!"
 	@echo ""
 	@echo "Next steps:"
@@ -75,13 +76,17 @@ wg: wireguard
 inventory:
 	@./scripts/generate_inventory.sh
 
+# Wait for SSH to be ready
+wait-ssh:
+	@./scripts/wait-for-ssh.sh
+
 # Configure VM with Ansible
 ansible:
 	@echo "🔧 Configuring AI agent VM with Ansible..."
 	@cd platform && ansible-playbook -i inventory.ini site.yml
 
 # Quick retry (skip infrastructure deployment)
-quick: wireguard inventory ansible
+quick: wireguard inventory wait-ssh ansible
 	@echo "✅ Configuration complete!"
 	@echo ""
 	@echo "Next steps:"
