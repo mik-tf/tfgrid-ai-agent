@@ -1,4 +1,6 @@
-.PHONY: help deploy infrastructure ansible wireguard wg inventory address connect ping clean verify login-qwen create-project run-project monitor-project stop-project list-projects git-setup git-show-key
+.PHONY: help init deploy infrastructure ansible wireguard wg inventory address connect ping clean verify \
+        login create run stop monitor list git-setup git-key \
+        login-qwen create-project run-project monitor-project stop-project list-projects git-show-key
 
 # Default target
 all: deploy
@@ -9,10 +11,11 @@ help:
 	@echo "==========================================="
 	@echo ""
 	@echo "🚀 Quick Start:"
+	@echo "  make init                - Initialize .env with smart defaults"
 	@echo "  make deploy              - Complete deployment (infrastructure + ansible)"
-	@echo "  make login-qwen          - Login to Qwen on VM (interactive)"
-	@echo "  make create-project project=my-app  - Create new agent project"
-	@echo "  make run-project project=my-app     - Start agent loop"
+	@echo "  make login               - Login to Qwen on VM (interactive)"
+	@echo "  make create project=my-app  - Create new agent project"
+	@echo "  make run project=my-app     - Start agent loop"
 	@echo ""
 	@echo "📋 Infrastructure Commands:"
 	@echo "  make infrastructure      - Deploy VM on ThreeFold Grid"
@@ -28,12 +31,12 @@ help:
 	@echo "  make ping                - Test VM connectivity"
 	@echo ""
 	@echo "🤖 AI Agent Operations:"
-	@echo "  make login-qwen                     - Login to Qwen (interactive)"
-	@echo "  make create-project project=<name>  - Create new project"
-	@echo "  make run-project project=<name>     - Start agent loop"
-	@echo "  make monitor-project project=<name> - Monitor progress"
-	@echo "  make stop-project project=<name>    - Stop agent loop"
-	@echo "  make list-projects                  - List all projects"
+	@echo "  make login                - Login to Qwen (interactive)"
+	@echo "  make create project=name  - Create new project"
+	@echo "  make run project=name     - Start agent loop"
+	@echo "  make monitor project=name - Monitor progress"
+	@echo "  make stop project=name    - Stop agent loop"
+	@echo "  make list                 - List all projects"
 	@echo ""
 	@echo "🔧 Git Configuration:"
 	@echo "  make git-setup project=<name> provider=github  - Setup GitHub remote"
@@ -52,9 +55,9 @@ deploy: infrastructure wireguard inventory ansible
 	@echo "✅ Deployment complete!"
 	@echo ""
 	@echo "Next steps:"
-	@echo "  1. Login to Qwen: make login-qwen"
-	@echo "  2. Create project: make create-project project=my-app"
-	@echo "  3. Run Agent: make run-project project=my-app"
+	@echo "  1. Login to Qwen: make login"
+	@echo "  2. Create project: make create project=my-app"
+	@echo "  3. Run Agent: make run project=my-app"
 
 # Deploy infrastructure
 infrastructure:
@@ -97,27 +100,27 @@ verify:
 	@./scripts/verify.sh
 
 # Login to Qwen
-login-qwen:
+login:
 	@./scripts/qwen-login.sh
 
 # Create AI agent project
-create-project:
+create:
 	@./scripts/agent-create-project.sh $(project)
 
 # Run AI agent project
-run-project:
+run:
 	@./scripts/agent-run-project.sh $(project)
 
 # Monitor AI agent project
-monitor-project:
+monitor:
 	@./scripts/agent-monitor-project.sh $(project)
 
 # Stop agent project
-stop-project:
+stop:
 	@./scripts/agent-stop-project.sh $(project)
 
 # List all projects
-list-projects:
+list:
 	@./scripts/agent-list-projects.sh
 
 # Setup git remote
@@ -125,5 +128,14 @@ git-setup:
 	@./scripts/agent-git-setup.sh $(project) $(provider) $(user)
 
 # Show git SSH key
-git-show-key:
+git-key:
 	@./scripts/address.sh | grep -A 1 "Git SSH Key"
+
+# Legacy aliases for backwards compatibility
+login-qwen: login
+create-project: create
+run-project: run
+monitor-project: monitor
+stop-project: stop
+list-projects: list
+git-show-key: git-key

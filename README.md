@@ -148,7 +148,7 @@ make deploy
 
 **No API key or credit card needed!**
 ```bash
-make login-qwen
+make login
 # Login with your Google account
 # Get 2,000 FREE tokens daily - perfect for getting started!
 ```
@@ -156,19 +156,19 @@ make login-qwen
 ### 6. Create & Run Project
 ```bash
 # Create project
-make create-project project=my-app
+make create project=my-app
 
 # Setup git remote (optional)
 make git-setup project=my-app provider=github
 
 # Start agent loop
-make run-project project=my-app
+make run project=my-app
 
 # Monitor progress
-make monitor-project project=my-app
+make monitor project=my-app
 
 # Stop when done
-make stop-project project=my-app
+make stop project=my-app
 ```
 
 **That's it!** The agent is now running on your TFGrid VM. 🚀
@@ -325,29 +325,29 @@ make verify
 make address
 
 # 4. Login to Qwen
-make login-qwen
+make login
 
 # 5. Create project
-make create-project project=my-website
+make create project=my-website
 
 # 6. (Optional) Setup git remote
-make git-show-key  # Copy key to GitHub
+make git-key  # Copy key to GitHub
 make git-setup project=my-website provider=github
 
 # 7. Start AI agent
-make run-project project=my-website
+make run project=my-website
 
 # 8. Monitor in another terminal
-make monitor-project project=my-website
+make monitor project=my-website
 
 # 9. Connect to VM (optional)
 make connect
 
 # 10. Stop AI agent when done
-make stop-project project=my-website
+make stop project=my-website
 
 # 11. List all projects
-make list-projects
+make list
 
 # 12. Clean up (when done)
 make clean
@@ -374,17 +374,17 @@ make ping           # Test connectivity
 
 **Agent:**
 ```bash
-make login-qwen                         # Login to Qwen
-make create-project project=my-app      # Create project
-make run-project project=my-app         # Start AI agent
-make monitor-project project=my-app     # Monitor progress
-make stop-project project=my-app        # Stop AI agent
-make list-projects                      # List all projects
+make login                         # Login to Qwen
+make create project=my-app      # Create project
+make run project=my-app         # Start AI agent
+make monitor project=my-app     # Monitor progress
+make stop project=my-app        # Stop AI agent
+make list                      # List all projects
 ```
 
 **Git:**
 ```bash
-make git-show-key                                  # Show SSH key
+make git-key                                  # Show SSH key
 make git-setup project=my-app provider=github      # GitHub
 make git-setup project=my-app provider=gitea       # Gitea
 make git-setup project=my-app provider=<custom>    # Custom URL
@@ -482,7 +482,7 @@ make ping
 
 ```bash
 # Login to Qwen
-make login-qwen
+make login
 
 # Or connect and login manually
 make connect
@@ -493,7 +493,7 @@ qwen login
 
 ```bash
 # Show git SSH key
-make git-show-key
+make git-key
 
 # Add key to GitHub/Gitea
 # Then setup remote again
@@ -504,10 +504,10 @@ make git-setup project=my-app provider=github
 
 ```bash
 # List projects
-make list-projects
+make list
 
 # Create project
-make create-project project=my-app
+make create project=my-app
 ```
 
 ### Deployment Fails
