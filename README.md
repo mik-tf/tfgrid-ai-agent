@@ -136,7 +136,14 @@ chmod 600 ~/.config/threefold/github_token
 # Set environment variable
 # Fish
 set -x GITHUB_TOKEN (cat ~/.config/threefold/github_token)
+# Bash
 export GITHUB_TOKEN=$(cat ~/.config/threefold/github_token)
+```
+
+**Security Note:**
+- Token is stored with 600 permissions (owner-only access) on VM
+- VM is only accessible via WireGuard/Mycelium VPN
+- **Alternative:** Skip token and manually add VM's SSH key to GitHub (more secure)
 
 ### 4. Deploy
 ```bash
