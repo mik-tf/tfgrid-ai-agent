@@ -31,24 +31,29 @@ fi
 if [ "$CONNECTIVITY_NETWORK" = "mycelium" ]; then
     VM_IP=$($TF_CMD output -raw ai_agent_mycelium_ip)
 else
-    VM_IP=$($TF_CMD output -raw ai_agent_wg_ip)
+    VM_IP=$($TF_CMD output -raw ai_agent_wg_ip | sed 's|/.*||')
 fi
 
 cd ..
 
-echo "🔐 Logging into Qwen on AI agent VM"
-echo "=================================="
+echo "🔐 Launching Qwen CLI on AI agent VM"
+echo "===================================="
 echo ""
-echo "Follow the prompts to authenticate with Google/Gmail"
-echo "This provides 2000 free tokens per day"
+echo "This will open an interactive Qwen session."
+echo "Authentication will happen automatically on first use."
+echo "Press Ctrl+D or type 'exit' to close the session."
 echo ""
 
 # Use -t to allocate TTY for interactive session
-ssh -t -o StrictHostKeyChecking=no root@$VM_IP "qwen login"
+# Disable host key checking to avoid warnings on redeployment
+ssh -t \
+    -o StrictHostKeyChecking=no \
+    -o UserKnownHostsFile=/dev/null \
+    root@$VM_IP "qwen"
 
 echo ""
-echo "✅ Qwen authentication complete!"
+echo "✅ Qwen session ended"
 echo ""
 echo "Next steps:"
-echo "  1. Create project: make create-project project=my-app"
-echo "  2. Run AI agent: make run-project project=my-app"
+echo "  1. Create project: make create project=my-app"
+echo "  2. Run AI agent: make run project=my-app"

@@ -31,10 +31,10 @@ fi
 if [ "$CONNECTIVITY_NETWORK" = "mycelium" ]; then
     VM_IP=$($TF_CMD output -raw ai_agent_mycelium_ip)
 else
-    VM_IP=$($TF_CMD output -raw ai_agent_wg_ip)
+    VM_IP=$($TF_CMD output -raw ai_agent_wg_ip | sed 's|/.*||')
 fi
 
 cd ..
 
 echo "🔗 Connecting to AI agent VM: $VM_IP ($CONNECTIVITY_NETWORK)"
-ssh -o StrictHostKeyChecking=no root@$VM_IP
+ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null root@$VM_IP
