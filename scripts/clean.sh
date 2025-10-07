@@ -14,6 +14,14 @@ if [ "$CONFIRM" != "yes" ]; then
     exit 0
 fi
 
+# Load environment variables from .env if it exists
+if [ -f .env ]; then
+    echo "📝 Loading configuration from .env..."
+    set -a
+    source .env
+    set +a
+fi
+
 # Check if tofu/terraform is available
 if command -v tofu &> /dev/null; then
     TF_CMD="tofu"

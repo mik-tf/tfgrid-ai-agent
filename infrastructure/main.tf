@@ -112,7 +112,7 @@ resource "grid_deployment" "ai_agent" {
     memory           = var.ai_agent_mem
     rootfs_size      = var.ai_agent_disk * 1024  # Convert GB to MB
     entrypoint       = "/sbin/zinit init"
-    planetary        = true
+    mycelium_ip_seed = random_bytes.ai_agent_ip_seed.hex
     env_vars = {
       SSH_KEY = local.ssh_key
     }
