@@ -12,19 +12,11 @@
     state: present
     update_cache: yes
 
-- name: Install npm global packages
-  npm:
-    name: "{{ item }}"
-    global: yes
-    state: present
-  loop:
-    - npm@latest
-
 - name: Install Qwen CLI
   npm:
-    name: "@anthropics/claude-cli"
+    name: "@qwen-code/qwen-code"
     global: yes
-    state: present
+    state: latest
 
 - name: Clone ai-agent repository
   git:

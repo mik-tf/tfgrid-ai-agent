@@ -12,8 +12,8 @@ ai_agent_workspace: /opt/ai-agent-projects
 ai_agent_repo: https://github.com/mik-tf/ai-agent.git
 ai_agent_path: /opt/ai-agent
 
-# Node.js version
-nodejs_version: "18"
+# Node.js version (LTS)
+nodejs_version: "20"
 
 # Optional: Qwen API key (if using paid tier)
 qwen_api_key: "{{ lookup('env', 'ANTHROPIC_API_KEY') | default('', true) }}"
