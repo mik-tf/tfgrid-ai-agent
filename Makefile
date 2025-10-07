@@ -41,19 +41,14 @@ help:
 	@echo "  make git-setup project=<name> provider=<url>   - Setup custom remote"
 	@echo "  make git-show-key                              - Show git SSH key"
 	@echo ""
-	@echo "📖 Configuration:"
-	@echo "  1. Copy .env.example to .env and edit"
-	@echo "  2. Set mnemonic: set -x TF_VAR_mnemonic (cat ~/.config/threefold/mnemonic)"
-	@echo "  3. Run: make deploy"
-	@echo ""
-	@echo "🔗 Documentation:"
-	@echo "  README.md           - Main documentation"
-	@echo "  docs/QUICKSTART.md  - Quick start guide"
-	@echo "  docs/ARCHITECTURE.md - System architecture"
+	@echo "See docs/ for more information"
+
+# Initialize .env with smart defaults
+init:
+	@bash scripts/init-env.sh
 
 # Complete deployment
 deploy: infrastructure wireguard inventory ansible
-	@echo ""
 	@echo "✅ Deployment complete!"
 	@echo ""
 	@echo "Next steps:"

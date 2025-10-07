@@ -88,34 +88,65 @@ git clone https://github.com/mik-tf/tfgrid-ai-agent
 cd tfgrid-ai-agent
 ```
 
-### 2. Configure
-```bash
-# Copy configuration template
-cp .env.example .env
+### 2. Configure Environment
 
-# Edit configuration
-nano .env
-# Set: TF_VAR_tfgrid_network, TF_VAR_ai_agent_node, resources, git config
+**Option A: Automatic (Recommended)**
+```bash
+make init
+# → Interactive setup that auto-detects your git config
+# → Just answer a few questions (node ID, resources)
 ```
 
-### 3. Set Mnemonic
-```bash
-# Bash
-export TF_VAR_mnemonic=$(cat ~/.config/threefold/mnemonic)
+The `make init` command will:
+- ✅ Auto-detect your local git name/email
+- ✅ Auto-detect GitHub username (if using `gh` CLI)
+- ✅ Prompt for TFGrid node ID and VM resources
+- ✅ Create `.env` with sensible defaults
 
+**Option B: Manual**
+```bash
+cp .env.example .env
+nano .env
+# → Edit all values manually
+```
+
+### 3. Set Credentials
+
+**Required: TFGrid Mnemonic**
+```bash
+# Store mnemonic securely
+mkdir -p ~/.config/threefold
+echo "your mnemonic words here" > ~/.config/threefold/mnemonic
+chmod 600 ~/.config/threefold/mnemonic
+
+# Set environment variable
 # Fish
 set -x TF_VAR_mnemonic (cat ~/.config/threefold/mnemonic)
+# Bash
+export TF_VAR_mnemonic=$(cat ~/.config/threefold/mnemonic)
 ```
 
-### 4. Deploy Everything
+**Optional: GitHub Token (for automated git push from VM)**
+```bash
+# Create token: GitHub.com → Settings → Developer settings → Personal access tokens
+# Scopes needed: repo, workflow
+echo "ghp_your_token_here" > ~/.config/threefold/github_token
+chmod 600 ~/.config/threefold/github_token
+
+# Set environment variable
+# Fish
+set -x GITHUB_TOKEN (cat ~/.config/threefold/github_token)
+export GITHUB_TOKEN=$(cat ~/.config/threefold/github_token)
+
+### 4. Deploy
 ```bash
 make deploy
-# Deploys VM, sets up WireGuard, configures with Ansible
+# → Deploys VM, configures with Ansible, sets up WireGuard
+# → Takes 5-10 minutes
 ```
-
 ### 5. Login to Qwen (FREE!)
 
-**🎁 No API key or credit card needed!**
+**No API key or credit card needed!**
 ```bash
 make login-qwen
 # Login with your Google account
