@@ -33,7 +33,7 @@ if ! $TF_CMD output ai_agent_wg_ip &>/dev/null; then
 fi
 
 # Get outputs
-AI_AGENT_WG_IP=$($TF_CMD output -raw ai_agent_wg_ip)
+AI_AGENT_WG_IP=$($TF_CMD output -raw ai_agent_wg_ip | sed 's|/.*||')  # Strip CIDR notation if present
 AI_AGENT_MYCELIUM_IP=$($TF_CMD output -raw ai_agent_mycelium_ip)
 AI_AGENT_NODE_ID=$($TF_CMD output -raw ai_agent_node_id)
 

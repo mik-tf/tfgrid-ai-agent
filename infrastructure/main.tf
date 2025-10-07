@@ -129,8 +129,8 @@ output "ai_agent_node_id" {
 }
 
 output "ai_agent_wg_ip" {
-  value       = regex("Address = ([0-9.]+)", grid_network.ai_agent_network.access_wg_config)[0]
-  description = "AI Agent VM WireGuard IP address"
+  value       = grid_deployment.ai_agent.vms[0].ip
+  description = "AI Agent VM WireGuard IP address (private network IP)"
 }
 
 output "ai_agent_mycelium_ip" {
