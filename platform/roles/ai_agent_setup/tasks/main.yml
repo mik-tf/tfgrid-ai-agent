@@ -68,6 +68,22 @@
   when: qwen_api_key != ''
   no_log: yes
 
+- name: Configure GitHub token for git operations (if provided)
+  block:
+    - name: Setup git credential helper with token
+      shell: |
+        git config --global credential.helper store
+        echo "https://{{ github_token }}@github.com" > /root/.git-credentials
+        chmod 600 /root/.git-credentials
+      no_log: yes
+      
+    - name: Verify git credentials configured
+      shell: git config --global credential.helper
+      register: git_cred_check
+      changed_when: false
+      
+  when: github_token is defined and github_token != ''
+
 - name: Display git SSH public key
   debug:
     msg: |

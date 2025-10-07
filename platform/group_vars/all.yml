@@ -17,3 +17,6 @@ nodejs_version: "18"
 
 # Optional: Qwen API key (if using paid tier)
 qwen_api_key: "{{ lookup('env', 'ANTHROPIC_API_KEY') | default('', true) }}"
+
+# Optional: GitHub personal access token (for automated git push)
+github_token: "{{ lookup('env', 'GITHUB_TOKEN') | default('', true) }}"
