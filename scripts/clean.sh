@@ -41,14 +41,39 @@ sudo wg-quick down wg-ai-agent 2>/dev/null || true
 echo ""
 echo "💥 Destroying infrastructure..."
 cd infrastructure
-$TF_CMD destroy -auto-approve
+if $TF_CMD destroy -auto-approve; then
+    echo "✅ Infrastructure destroyed successfully"
+    
+    # Clean up Terraform/OpenTofu state files and directories
+    echo ""
+    echo "🗑️  Removing Terraform/OpenTofu state files..."
+    
+    # Remove state files
+    rm -f terraform.tfstate
+    rm -f terraform.tfstate.backup
+    rm -f state.json
+    rm -f .terraform.lock.hcl
+    
+    # Remove .terraform directory
+    if [ -d .terraform ]; then
+        rm -rf .terraform
+        echo "   ✓ Removed .terraform directory"
+    fi
+    
+    echo "   ✓ Removed state files"
+else
+    echo "❌ Infrastructure destruction failed"
+    cd ..
+    exit 1
+fi
 cd ..
 
-# Clean up generated files
+# Clean up generated configuration files
 echo ""
-echo "🗑️  Removing generated files..."
+echo "🗑️  Removing generated configuration files..."
 rm -f wg-ai-agent.conf
 rm -f platform/inventory.ini
+echo "   ✓ Removed configuration files"
 
 echo ""
 echo "✅ Cleanup complete!"
