@@ -1,0 +1,9 @@
+---
+- name: Configure AI agent VM
+  hosts: ai_agent
+  become: yes
+  roles:
+    - role: ai_agent_common
+      tags: [common]
+    - role: ai_agent_setup
+      tags: [ai-agent]

@@ -1,0 +1,45 @@
+# Environment configuration
+.env
+
+# Terraform/OpenTofu
+infrastructure/.terraform/
+infrastructure/.terraform.lock.hcl
+infrastructure/terraform.tfstate
+infrastructure/terraform.tfstate.backup
+infrastructure/*.tfstate
+infrastructure/*.tfstate.backup
+infrastructure/credentials.auto.tfvars
+
+# Ansible
+platform/inventory.ini
+platform/.vault_pass
+platform/vault.yml
+*.retry
+
+# SSH and WireGuard
+.ssh/
+*.conf
+wg*.conf
+
+# Logs
+*.log
+ai-agent-output.log
+ai-agent-errors.log
+agent-output.log
+agent-errors.log
+
+# System files
+.DS_Store
+Thumbs.db
+*~
+*.swp
+*.swo
+
+# IDE
+.vscode/
+.idea/
+*.iml
+
+# Temporary files
+*.tmp
+*.bak
