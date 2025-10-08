@@ -130,8 +130,8 @@ if ssh -o LogLevel=ERROR -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/
     echo "✅ Qwen is now authenticated!"
     echo ""
     echo "Next steps:"
-    echo "  1. Create project: make create project=my-app"
-    echo "  2. Run AI agent: make run project=my-app"
+    echo "  1. Create project: make create"
+    echo "  2. Run AI agent: make run"
 else
     echo "⚠️  Authentication verification failed."
     echo ""
