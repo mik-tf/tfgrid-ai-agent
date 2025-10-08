@@ -122,7 +122,7 @@ echo "━━━━━━━━━━━━━━━━━━━━━━━━�
 # Kill the qwen/expect processes
 ssh -o LogLevel=ERROR -o StrictHostKeyChecking=no \
     -o UserKnownHostsFile=/dev/null \
-    root@$VM_IP 'pkill -f "qwen" 2>/dev/null; pkill -f "expect" 2>/dev/null; true'
+    root@$VM_IP 'pkill -f "qwen" 2>/dev/null || true; pkill -f "expect" 2>/dev/null || true' || true
 
 echo ""
 echo "Authentication session ended."
