@@ -74,7 +74,7 @@ if [ -z "$PROJECT_NAME" ]; then
     if [ ${#PROJECTS[@]} -eq 1 ]; then
         read -p "Select project [${PROJECTS[0]}]: " SELECTION
     else
-        read -p "Select project (1-${#PROJECTS[@]}) or name [1]: " SELECTION
+        read -p "Select project (1-${#PROJECTS[@]}) or type name [1]: " SELECTION
     fi
     echo ""
     

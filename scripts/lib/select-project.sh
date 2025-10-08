@@ -45,7 +45,7 @@ select_project_from_vm() {
     if [ ${#PROJECTS[@]} -eq 1 ]; then
         read -p "Select project [${PROJECTS[0]}]: " selection
     else
-        read -p "Select project (1-${#PROJECTS[@]}) or name [1]: " selection
+        read -p "Select project (1-${#PROJECTS[@]}) or type name [1]: " selection
     fi
     echo ""
     
