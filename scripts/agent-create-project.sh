@@ -74,7 +74,32 @@ if ssh -o LogLevel=ERROR -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/
     exit 1
 fi
 
-# Delegate to ai-agent (it handles all project creation logic)
-# Note: NOT using -t flag because the auto-start feature launches a background process
-ssh -o LogLevel=ERROR -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null root@$VM_IP \
-    "cd /opt/ai-agent && make create PROJECT_NAME=$PROJECT_NAME"
+# Delegate to ai-agent for project creation
+# Set SKIP_AUTOSTART=1 to prevent remote auto-start prompt (we handle it locally)
+ssh -t -o LogLevel=ERROR -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null root@$VM_IP \
+    "cd /opt/ai-agent && SKIP_AUTOSTART=1 make create PROJECT_NAME=$PROJECT_NAME"
+
+# Check if creation was successful
+if [ $? -ne 0 ]; then
+    echo "❌ Error: Project creation failed"
+    exit 1
+fi
+
+# Ask locally if user wants to start the agent
+echo ""
+echo "🚀 Do you want to start the AI agent now for the project '$PROJECT_NAME'?"
+read -p "Start now? (y/N): " START_NOW
+echo ""
+
+if [[ "$START_NOW" =~ ^[Yy]$ ]]; then
+    echo "Starting AI agent for project '$PROJECT_NAME'..."
+    echo ""
+    
+    # Use the run script to start the agent (without -t so process persists)
+    cd "$(dirname "$0")/.."
+    make run PROJECT_NAME="$PROJECT_NAME"
+else
+    echo "Project created successfully!"
+    echo ""
+    echo "To start the agent later, run: make run PROJECT_NAME=$PROJECT_NAME"
+fi
