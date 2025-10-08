@@ -73,16 +73,16 @@ echo ""
 echo "  1️⃣  An OAuth authorization URL will appear below"
 echo "  2️⃣  COPY the URL and open it in your LOCAL browser"
 echo "  3️⃣  Complete the Google OAuth login in your browser"
-echo "  4️⃣  After 60 seconds, this session will automatically close"
-echo "  5️⃣  Authentication status and next steps will be displayed"
+echo "  4️⃣  Press ENTER here after completing OAuth"
 echo ""
 echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
 echo ""
 
+# Start qwen in background and capture the OAuth URL
 ssh -o LogLevel=ERROR -o StrictHostKeyChecking=no \
     -o UserKnownHostsFile=/dev/null \
-    root@$VM_IP 'rm -rf ~/.qwen && timeout 90 expect -c "
-set timeout 60
+    root@$VM_IP 'rm -rf ~/.qwen && timeout 120 expect -c "
+set timeout 90
 log_user 1
 spawn qwen
 expect {
@@ -91,22 +91,34 @@ expect {
         exp_continue
     }
     \"authorize\" {
-        # OAuth URL appeared, wait 60s for user to complete it in browser
-        sleep 60
-        send \"\x03\"
-        exit 0
+        # OAuth URL appeared - wait for user signal
+        expect timeout
     }
     timeout {
         puts \"\\nTimeout waiting for OAuth flow\"
         exit 1
     }
 }
-" 2>&1 || true'
+" > /tmp/qwen_oauth.log 2>&1 &'
+
+# Give it a moment to start and display the OAuth info
+sleep 3
+
+# Show the OAuth output from the VM
+echo ""
+ssh -o LogLevel=ERROR -o StrictHostKeyChecking=no \
+    -o UserKnownHostsFile=/dev/null \
+    root@$VM_IP 'cat /tmp/qwen_oauth.log 2>/dev/null || true'
 
 echo ""
 echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-echo "Authentication attempt completed."
+read -p "Press ENTER after completing OAuth in your browser..."
 echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+
+# Kill the qwen process on the VM
+ssh -o LogLevel=ERROR -o StrictHostKeyChecking=no \
+    -o UserKnownHostsFile=/dev/null \
+    root@$VM_IP 'pkill -f "qwen" 2>/dev/null || true'
 
 echo ""
 echo "Authentication session ended."
