@@ -14,6 +14,10 @@ CONNECTIVITY_NETWORK="${CONNECTIVITY_NETWORK:-wireguard}"
 # Get project name from argument or prompt interactively
 PROJECT_NAME="$1"
 if [ -z "$PROJECT_NAME" ]; then
+    echo ""
+    echo "Available projects (run 'make list' for details):"
+    ./scripts/agent-list-projects.sh 2>/dev/null | grep "📁" || echo "  (none)"
+    echo ""
     read -p "Enter project name: " PROJECT_NAME
     echo ""
 fi
@@ -55,7 +59,7 @@ echo "🛑 Stopping agent loop for: $PROJECT_NAME"
 echo "=========================================="
 
 # Check if project exists
-if ! ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null root@$VM_IP "test -d /opt/ai-agent-projects/$PROJECT_NAME" 2>/dev/null; then
+if ! ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null root@$VM_IP "test -d /opt/$PROJECT_NAME" 2>/dev/null; then
     echo "❌ Error: Project '$PROJECT_NAME' not found on VM"
     exit 1
 fi

@@ -1,5 +1,5 @@
 #!/bin/bash
-# List all agent projects on the VM
+# Show status of all agent projects on the VM
 set -e
 
 # Load .env to get network preference
@@ -31,15 +31,15 @@ fi
 if [ "$CONNECTIVITY_NETWORK" = "mycelium" ]; then
     VM_IP=$($TF_CMD output -raw ai_agent_mycelium_ip)
 else
-    VM_IP=$($TF_CMD output -raw ai_agent_wg_ip)
+    VM_IP=$($TF_CMD output -raw ai_agent_wg_ip | sed 's|/.*||')
 fi
 
 cd ..
 
-echo "📋 AI agent projects on VM"
-echo "========================"
+echo "📊 AI agent projects status"
+echo "============================"
 echo ""
 
-# List projects
+# Show status
 ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null root@$VM_IP \
-    "cd /opt/ai-agent && make list" 2>/dev/null || echo "(No projects found)"
+    "cd /opt/ai-agent && make status" 2>/dev/null || echo "(No projects found)"

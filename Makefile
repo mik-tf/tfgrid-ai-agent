@@ -1,5 +1,5 @@
 .PHONY: help init deploy quick infrastructure ansible wireguard wg inventory wait-ssh address connect ping clean verify \
-        login create run stop monitor list git-setup git-key \
+        login create run stop stopall monitor list remove logs summary status restart git-setup git-key \
         login-qwen create-project run-project monitor-project stop-project list-projects git-show-key
 
 # Default target
@@ -13,9 +13,9 @@ help:
 	@echo "🚀 Quick Start:"
 	@echo "  make init                - Initialize .env with smart defaults"
 	@echo "  make deploy              - Complete deployment (infrastructure + ansible)"
-	@echo "  make login               - Login to Qwen on VM (interactive)"
-	@echo "  make create project=my-app  - Create new agent project"
-	@echo "  make run project=my-app     - Start agent loop"
+	@echo "  make login               - Login to Qwen on VM"
+	@echo "  make create              - Create new agent project (interactive)"
+	@echo "  make run                 - Start agent loop (interactive)"
 	@echo ""
 	@echo "📋 Infrastructure Commands:"
 	@echo "  make infrastructure      - Deploy VM on ThreeFold Grid"
@@ -33,12 +33,18 @@ help:
 	@echo "  make ping                - Test VM connectivity"
 	@echo ""
 	@echo "🤖 AI Agent Operations:"
-	@echo "  make login                - Login to Qwen (interactive)"
-	@echo "  make create project=name  - Create new project"
-	@echo "  make run project=name     - Start agent loop"
-	@echo "  make monitor project=name - Monitor progress"
-	@echo "  make stop project=name    - Stop agent loop"
-	@echo "  make list                 - List all projects"
+	@echo "  make login                 - Login to Qwen (interactive)"
+	@echo "  make create [project=name] - Create new project (interactive if no name)"
+	@echo "  make run [project=name]    - Start agent loop (interactive if no name)"
+	@echo "  make monitor [project=name]- Monitor progress (interactive if no name)"
+	@echo "  make stop [project=name]   - Stop agent loop (interactive if no name)"
+	@echo "  make restart [project=name]- Restart agent (interactive if no name)"
+	@echo "  make stopall               - Stop all running projects"
+	@echo "  make list                  - List all projects"
+	@echo "  make remove [project=name] - Delete a project (interactive if no name)"
+	@echo "  make logs [project=name]   - View project logs (interactive if no name)"
+	@echo "  make summary [project=name]- Show project summary (interactive if no name)"
+	@echo "  make status                - Show status of all projects"
 	@echo ""
 	@echo "🔧 Git Configuration:"
 	@echo "  make git-setup project=<name> provider=github  - Setup GitHub remote"
@@ -134,9 +140,33 @@ monitor:
 stop:
 	@./scripts/agent-stop-project.sh $(project)
 
+# Stop all projects
+stopall:
+	@./scripts/agent-stopall-projects.sh
+
 # List all projects
 list:
 	@./scripts/agent-list-projects.sh
+
+# Remove/delete a project
+remove:
+	@./scripts/agent-remove-project.sh $(project)
+
+# View project logs
+logs:
+	@./scripts/agent-logs-project.sh $(project)
+
+# Show project summary
+summary:
+	@./scripts/agent-summary-project.sh $(project)
+
+# Show status of all projects
+status:
+	@./scripts/agent-status-projects.sh
+
+# Restart a project
+restart:
+	@./scripts/agent-restart-project.sh $(project)
 
 # Setup git remote
 git-setup:

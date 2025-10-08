@@ -66,11 +66,11 @@ fi
 echo "✅ Qwen is authenticated"
 
 # Check if project already exists
-if ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null root@$VM_IP "test -d /opt/ai-agent-projects/$PROJECT_NAME" 2>/dev/null; then
+if ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null root@$VM_IP "test -d /opt/$PROJECT_NAME" 2>/dev/null; then
     echo "❌ Error: Project '$PROJECT_NAME' already exists on VM"
     echo ""
     echo "Available projects:"
-    ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null root@$VM_IP "ls -1 /opt/ai-agent-projects/ 2>/dev/null || echo '  (none)'"
+    ./scripts/agent-list-projects.sh 2>/dev/null | grep "📁" || echo "  (none)"
     exit 1
 fi
 
@@ -88,4 +88,4 @@ echo ""
 echo "Next steps:"
 echo "  1. Add SSH key to GitHub: https://github.com/settings/keys"
 echo "  2. Setup git remote (optional): make git-setup project=$PROJECT_NAME provider=github"
-echo "  3. Run AI agent: make run-project project=$PROJECT_NAME"
+echo "  3. Run AI agent: make run"
