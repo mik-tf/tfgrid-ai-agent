@@ -56,5 +56,5 @@ fi
 cd ..
 
 # Delegate to ai-agent (it handles all logic: checking if running, stopping, confirmation)
-ssh -t -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null root@$VM_IP \
+ssh -t -o LogLevel=ERROR -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null root@$VM_IP \
     "cd /opt/ai-agent && make remove PROJECT_NAME=$PROJECT_NAME"

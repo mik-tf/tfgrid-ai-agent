@@ -65,5 +65,5 @@ if ! ssh -o LogLevel=ERROR -o StrictHostKeyChecking=no -o UserKnownHostsFile=/de
 fi
 
 # Delegate to ai-agent (it handles all stop logic)
-ssh -t -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null root@$VM_IP \
+ssh -t -o LogLevel=ERROR -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null root@$VM_IP \
     "cd /opt/ai-agent && make stop PROJECT_NAME=$PROJECT_NAME"

@@ -81,5 +81,5 @@ fi
 echo "✅ Qwen is authenticated"
 
 # Delegate to ai-agent (it handles all run logic)
-ssh -t -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null root@$VM_IP \
+ssh -t -o LogLevel=ERROR -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null root@$VM_IP \
     "cd /opt/ai-agent && make run PROJECT_NAME=$PROJECT_NAME"
