@@ -58,9 +58,6 @@ cd ..
 echo "🔄 Restarting agent loop for: $PROJECT_NAME"
 echo "=========================================="
 
-# Restart project on VM
-ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null root@$VM_IP \
+# Delegate to ai-agent (it handles all restart logic)
+ssh -t -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null root@$VM_IP \
     "cd /opt/ai-agent && make restart PROJECT_NAME=$PROJECT_NAME"
-
-echo ""
-echo "✅ Project '$PROJECT_NAME' restarted successfully!"

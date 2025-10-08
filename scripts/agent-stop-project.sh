@@ -64,9 +64,6 @@ if ! ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null root@$VM_IP
     exit 1
 fi
 
-# Stop agent loop
-ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null root@$VM_IP \
+# Delegate to ai-agent (it handles all stop logic)
+ssh -t -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null root@$VM_IP \
     "cd /opt/ai-agent && make stop PROJECT_NAME=$PROJECT_NAME"
-
-echo ""
-echo "✅ agent loop stopped for '$PROJECT_NAME'"

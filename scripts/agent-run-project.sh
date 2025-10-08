@@ -80,16 +80,6 @@ if ! ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null \
 fi
 echo "✅ Qwen is authenticated"
 
-# Start agent loop on VM
-echo "📝 Starting agent loop on VM..."
-ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null root@$VM_IP \
+# Delegate to ai-agent (it handles all run logic)
+ssh -t -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null root@$VM_IP \
     "cd /opt/ai-agent && make run PROJECT_NAME=$PROJECT_NAME"
-
-echo ""
-echo "✅ agent loop started for '$PROJECT_NAME'!"
-echo ""
-echo "Monitor progress:"
-echo "  make monitor"
-echo ""
-echo "Stop Agent:"
-echo "  make stop"

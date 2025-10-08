@@ -55,6 +55,6 @@ fi
 
 cd ..
 
-# Show summary
-ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null root@$VM_IP \
+# Delegate to ai-agent (it handles all summary display logic)
+ssh -t -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null root@$VM_IP \
     "cd /opt/ai-agent && make summary PROJECT_NAME=$PROJECT_NAME"

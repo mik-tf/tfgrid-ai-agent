@@ -74,18 +74,6 @@ if ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null root@$VM_IP "
     exit 1
 fi
 
-# Create project on VM
-echo "📝 Creating project on AI agent VM..."
+# Delegate to ai-agent (it handles all project creation logic)
 ssh -t -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null root@$VM_IP \
     "cd /opt/ai-agent && make create PROJECT_NAME=$PROJECT_NAME"
-
-echo ""
-echo "✅ Project '$PROJECT_NAME' created successfully!"
-echo ""
-echo "🔑 Git SSH Key (add to GitHub/Gitea):"
-ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null root@$VM_IP "cat /root/.ssh/id_ed25519_git.pub"
-echo ""
-echo "Next steps:"
-echo "  1. Add SSH key to GitHub: https://github.com/settings/keys"
-echo "  2. Setup git remote (optional): make git-setup project=$PROJECT_NAME provider=github"
-echo "  3. Run AI agent: make run"

@@ -64,6 +64,6 @@ if ! ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null root@$VM_IP
     exit 1
 fi
 
-# Monitor project
-ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null root@$VM_IP \
+# Delegate to ai-agent (it handles all monitoring logic)
+ssh -t -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null root@$VM_IP \
     "cd /opt/ai-agent && make monitor PROJECT_NAME=$PROJECT_NAME"

@@ -55,45 +55,6 @@ fi
 
 cd ..
 
-# Check if project is running
-echo "🔍 Checking project status..."
-IS_RUNNING=$(ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null root@$VM_IP \
-    "pgrep -f 'agent-loop.sh /opt/$PROJECT_NAME' || true" 2>/dev/null)
-
-if [ -n "$IS_RUNNING" ]; then
-    echo ""
-    echo "⚠️  WARNING: Project '$PROJECT_NAME' is currently running!"
-    echo ""
-    read -p "Stop the project before removing? (yes/no): " STOP_CONFIRM
-    echo ""
-    
-    if [ "$STOP_CONFIRM" = "yes" ]; then
-        echo "🛑 Stopping project..."
-        ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null root@$VM_IP \
-            "cd /opt/ai-agent && make stop PROJECT_NAME=$PROJECT_NAME" 2>/dev/null || true
-        echo "✅ Project stopped"
-        echo ""
-    else
-        echo "❌ Removal cancelled. Stop the project first with: make stop"
-        exit 0
-    fi
-fi
-
-echo "🗑️  Removing project: $PROJECT_NAME"
-echo "=========================================="
-echo ""
-echo "⚠️  WARNING: This will permanently delete the project!"
-read -p "Are you sure? (yes/no): " CONFIRM
-echo ""
-
-if [ "$CONFIRM" != "yes" ]; then
-    echo "❌ Removal cancelled"
-    exit 0
-fi
-
-# Remove project on VM
-ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null root@$VM_IP \
+# Delegate to ai-agent (it handles all logic: checking if running, stopping, confirmation)
+ssh -t -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null root@$VM_IP \
     "cd /opt/ai-agent && make remove PROJECT_NAME=$PROJECT_NAME"
-
-echo ""
-echo "✅ Project '$PROJECT_NAME' removed successfully!"
