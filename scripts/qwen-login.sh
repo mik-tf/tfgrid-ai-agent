@@ -79,8 +79,8 @@ echo ""
 
 ssh -o StrictHostKeyChecking=no \
     -o UserKnownHostsFile=/dev/null \
-    root@$VM_IP 'rm -rf ~/.qwen && timeout 180 expect -c "
-set timeout 180
+    root@$VM_IP 'rm -rf ~/.qwen && timeout 90 expect -c "
+set timeout 60
 log_user 1
 spawn qwen
 expect {
@@ -89,8 +89,8 @@ expect {
         exp_continue
     }
     \"authorize\" {
-        # OAuth URL appeared, give user time to complete it
-        sleep 120
+        # OAuth URL appeared, wait 60s for user to complete it in browser
+        sleep 60
         send \"\x03\"
         exit 0
     }
