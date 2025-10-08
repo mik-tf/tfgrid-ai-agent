@@ -59,7 +59,7 @@ echo "🛑 Stopping agent loop for: $PROJECT_NAME"
 echo "=========================================="
 
 # Check if project exists
-if ! ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null root@$VM_IP "test -d /opt/$PROJECT_NAME" 2>/dev/null; then
+if ! ssh -o LogLevel=ERROR -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null root@$VM_IP "test -d /opt/$PROJECT_NAME" 2>/dev/null; then
     echo "❌ Error: Project '$PROJECT_NAME' not found on VM"
     exit 1
 fi

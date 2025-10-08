@@ -55,14 +55,14 @@ if ssh -o ConnectTimeout=5 -o StrictHostKeyChecking=no root@$AI_AGENT_WG_IP "ech
     echo "✅ SSH Access: Working"
     
     # Check if ai-agent is installed
-    if ssh -o StrictHostKeyChecking=no root@$AI_AGENT_WG_IP "test -d /opt/ai-agent" 2>/dev/null; then
+    if ssh -o LogLevel=ERROR -o StrictHostKeyChecking=no root@$AI_AGENT_WG_IP "test -d /opt/ai-agent" 2>/dev/null; then
         echo "✅ AI-Agent: Installed"
     else
         echo "❌ AI-Agent: Not installed (run: make ansible)"
     fi
     
     # Check if Qwen CLI is installed
-    if ssh -o StrictHostKeyChecking=no root@$AI_AGENT_WG_IP "command -v qwen" &>/dev/null; then
+    if ssh -o LogLevel=ERROR -o StrictHostKeyChecking=no root@$AI_AGENT_WG_IP "command -v qwen" &>/dev/null; then
         echo "✅ Qwen CLI: Installed"
     else
         echo "❌ Qwen CLI: Not installed (run: make ansible)"

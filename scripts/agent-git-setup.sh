@@ -55,7 +55,7 @@ fi
 cd ..
 
 # Check if project exists
-if ! ssh -o StrictHostKeyChecking=no root@$VM_IP "test -d /opt/ai-agent-projects/$PROJECT_NAME" 2>/dev/null; then
+if ! ssh -o LogLevel=ERROR -o StrictHostKeyChecking=no root@$VM_IP "test -d /opt/ai-agent-projects/$PROJECT_NAME" 2>/dev/null; then
     echo "❌ Error: Project '$PROJECT_NAME' not found on VM"
     exit 1
 fi
@@ -113,7 +113,7 @@ echo "Remote URL: $REMOTE_URL"
 echo ""
 
 # Setup remote on VM
-ssh -o StrictHostKeyChecking=no root@$VM_IP \
+ssh -o LogLevel=ERROR -o StrictHostKeyChecking=no root@$VM_IP \
     "cd /opt/ai-agent-projects/$PROJECT_NAME && \
      git remote add origin '$REMOTE_URL' && \
      git push -u origin main"

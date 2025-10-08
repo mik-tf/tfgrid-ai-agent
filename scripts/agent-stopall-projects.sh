@@ -41,7 +41,7 @@ echo "==============================="
 echo ""
 
 # Stop all projects on VM
-ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null root@$VM_IP \
+ssh -o LogLevel=ERROR -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null root@$VM_IP \
     "cd /opt/ai-agent && make stopall"
 
 echo ""

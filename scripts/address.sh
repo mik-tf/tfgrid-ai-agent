@@ -44,7 +44,7 @@ echo "🔑 Git SSH Key (add to GitHub/Gitea):"
 if [ -f platform/inventory.ini ]; then
     VM_IP=$AI_AGENT_WG_IP
     if ssh -o ConnectTimeout=5 -o StrictHostKeyChecking=no root@$VM_IP "test -f /root/.ssh/id_ed25519_git.pub" 2>/dev/null; then
-        ssh -o StrictHostKeyChecking=no root@$VM_IP "cat /root/.ssh/id_ed25519_git.pub" 2>/dev/null || echo "  (Run 'make ansible' first to generate key)"
+        ssh -o LogLevel=ERROR -o StrictHostKeyChecking=no root@$VM_IP "cat /root/.ssh/id_ed25519_git.pub" 2>/dev/null || echo "  (Run 'make ansible' first to generate key)"
     else
         echo "  (Run 'make ansible' first to generate key)"
     fi

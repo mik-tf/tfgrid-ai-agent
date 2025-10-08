@@ -41,5 +41,5 @@ echo "========================"
 echo ""
 
 # List projects
-ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null root@$VM_IP \
+ssh -o LogLevel=ERROR -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null root@$VM_IP \
     "cd /opt/ai-agent && make list" 2>/dev/null || echo "(No projects found)"

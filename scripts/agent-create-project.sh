@@ -56,7 +56,7 @@ echo "========================================="
 
 # Check if Qwen is authenticated by checking for settings file
 echo "Checking Qwen authentication..."
-if ! ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null \
+if ! ssh -o LogLevel=ERROR -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null \
     root@$VM_IP "test -f ~/.qwen/settings.json" 2>/dev/null; then
     echo "❌ Error: Qwen not authenticated on VM"
     echo ""
@@ -66,7 +66,7 @@ fi
 echo "✅ Qwen is authenticated"
 
 # Check if project already exists
-if ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null root@$VM_IP "test -d /opt/$PROJECT_NAME" 2>/dev/null; then
+if ssh -o LogLevel=ERROR -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null root@$VM_IP "test -d /opt/$PROJECT_NAME" 2>/dev/null; then
     echo "❌ Error: Project '$PROJECT_NAME' already exists on VM"
     echo ""
     echo "Available projects:"

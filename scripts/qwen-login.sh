@@ -79,7 +79,7 @@ echo ""
 echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
 echo ""
 
-ssh -o StrictHostKeyChecking=no \
+ssh -o LogLevel=ERROR -o StrictHostKeyChecking=no \
     -o UserKnownHostsFile=/dev/null \
     root@$VM_IP 'rm -rf ~/.qwen && timeout 90 expect -c "
 set timeout 60
@@ -113,7 +113,7 @@ echo "Authentication session ended."
 echo ""
 echo "Verifying authentication status..."
 
-if ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null \
+if ssh -o LogLevel=ERROR -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null \
     root@$VM_IP "test -f ~/.qwen/settings.json" &>/dev/null; then
     echo "✅ Qwen is now authenticated!"
     echo ""

@@ -37,4 +37,4 @@ fi
 cd ..
 
 echo "🔗 Connecting to AI agent VM: $VM_IP ($CONNECTIVITY_NETWORK)"
-ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null root@$VM_IP
+ssh -o LogLevel=ERROR -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null root@$VM_IP
