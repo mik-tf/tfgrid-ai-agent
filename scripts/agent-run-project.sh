@@ -11,22 +11,6 @@ if [ -f .env ]; then
 fi
 CONNECTIVITY_NETWORK="${CONNECTIVITY_NETWORK:-wireguard}"
 
-# Get project name from argument or prompt interactively
-PROJECT_NAME="$1"
-if [ -z "$PROJECT_NAME" ]; then
-    echo ""
-    echo "Available projects (run 'make list' for details):"
-    ./scripts/agent-list-projects.sh 2>/dev/null | grep "📁" || echo "  (none)"
-    echo ""
-    read -p "Enter project name: " PROJECT_NAME
-    echo ""
-fi
-
-if [ -z "$PROJECT_NAME" ]; then
-    echo "❌ Error: Project name is required"
-    exit 1
-fi
-
 # Check if tofu/terraform is available
 if command -v tofu &> /dev/null; then
     TF_CMD="tofu"
@@ -54,6 +38,66 @@ else
 fi
 
 cd ..
+
+# Get project name from argument or select interactively
+PROJECT_NAME="$1"
+if [ -z "$PROJECT_NAME" ]; then
+    echo ""
+    
+    # Get list of projects via SSH
+    PROJECTS_LIST=$(ssh -o LogLevel=ERROR -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null root@$VM_IP \
+        "cd /opt/ai-agent && make list" 2>/dev/null | grep "📁" | sed 's/.*📁 //')
+    
+    if [ -z "$PROJECTS_LIST" ]; then
+        echo "❌ No projects found"
+        echo ""
+        echo "Create one with: make create"
+        exit 1
+    fi
+    
+    # Convert to array
+    mapfile -t PROJECTS <<< "$PROJECTS_LIST"
+    
+    # Show numbered list
+    echo "Available projects:"
+    for i in "${!PROJECTS[@]}"; do
+        num=$((i + 1))
+        if [ $num -eq 1 ]; then
+            echo "  $num. ${PROJECTS[$i]} [default]"
+        else
+            echo "  $num. ${PROJECTS[$i]}"
+        fi
+    done
+    echo ""
+    
+    # Prompt for selection
+    if [ ${#PROJECTS[@]} -eq 1 ]; then
+        read -p "Select project [${PROJECTS[0]}]: " SELECTION
+    else
+        read -p "Select project (1-${#PROJECTS[@]}) or name [1]: " SELECTION
+    fi
+    echo ""
+    
+    # Handle selection
+    if [ -z "$SELECTION" ]; then
+        PROJECT_NAME="${PROJECTS[0]}"
+    elif [[ "$SELECTION" =~ ^[0-9]+$ ]]; then
+        idx=$((SELECTION - 1))
+        if [ $idx -ge 0 ] && [ $idx -lt ${#PROJECTS[@]} ]; then
+            PROJECT_NAME="${PROJECTS[$idx]}"
+        else
+            echo "❌ Invalid selection: $SELECTION"
+            exit 1
+        fi
+    else
+        PROJECT_NAME="$SELECTION"
+    fi
+fi
+
+if [ -z "$PROJECT_NAME" ]; then
+    echo "❌ Error: Project name is required"
+    exit 1
+fi
 
 echo "🚀 Starting agent loop for: $PROJECT_NAME"
 echo "=========================================="
