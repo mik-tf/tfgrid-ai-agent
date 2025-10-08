@@ -19,6 +19,7 @@
       - jq
       - tmux
       - screen
+      - expect
     state: present
 
 - name: Configure git user

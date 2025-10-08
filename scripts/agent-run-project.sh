@@ -60,10 +60,10 @@ if ! ssh -o StrictHostKeyChecking=no root@$VM_IP "test -d /opt/ai-agent-projects
     exit 1
 fi
 
-# Check if Qwen is authenticated by testing a simple command
+# Check if Qwen is authenticated by checking for settings file
 echo "Checking Qwen authentication..."
 if ! ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null \
-    root@$VM_IP "timeout 5 qwen --version" &>/dev/null; then
+    root@$VM_IP "test -f ~/.qwen/settings.json" 2>/dev/null; then
     echo "❌ Error: Qwen not authenticated on VM"
     echo ""
     echo "Please run: make login"
