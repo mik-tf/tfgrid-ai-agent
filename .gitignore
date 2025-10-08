@@ -1,15 +1,9 @@
 # Environment configuration
 .env
 
-# Terraform/OpenTofu
-infrastructure/.terraform/
-infrastructure/state.json
-infrastructure/.terraform.lock.hcl
-infrastructure/terraform.tfstate
-infrastructure/terraform.tfstate.backup
-infrastructure/*.tfstate
-infrastructure/*.tfstate.backup
-infrastructure/credentials.auto.tfvars
+# Terraform/OpenTofu - ignore everything except main.tf
+infrastructure/*
+!infrastructure/main.tf
 
 # Ansible
 platform/inventory.ini
