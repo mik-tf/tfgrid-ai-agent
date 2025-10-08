@@ -245,19 +245,20 @@ sudo ./scripts/wg.sh
 
 **Solution:**
 ```bash
-# Login to Qwen
-make login-qwen
+# Login to Qwen (this will guide you through OAuth authentication)
+make login
 
-# Verify authentication
+# Verify authentication (should run without errors)
 make connect
-qwen auth status
+qwen --version
 
-# Should show: "Authenticated as: your@email.com"
+# Or test with a simple command
+echo "hello" | qwen
 ```
 
 ### Qwen Login Fails
 
-**Problem**: `Error during Qwen login`
+**Problem**: `Error during Qwen login` or authentication loop
 
 **Solutions:**
 
@@ -265,13 +266,13 @@ qwen auth status
    ```bash
    make connect
    ping -c 3 8.8.8.8
-   curl -I https://www.anthropic.com
+   curl -I https://chat.qwen.ai
    ```
 
-2. **Try API key method:**
+2. **Try API key method (enterprise/paid users only):**
    ```bash
-   # Set API key
-   export ANTHROPIC_API_KEY=sk-ant-api03-xxx
+   # Set API key (if you have one)
+   export QWEN_API_KEY=your-qwen-api-key
    
    # Reconfigure VM
    make ansible
@@ -280,8 +281,17 @@ qwen auth status
 3. **Update Qwen CLI:**
    ```bash
    make connect
-   npm update -g @anthropics/claude-cli
-   qwen version
+   npm update -g @qwen-code/qwen-code
+   qwen --version
+   ```
+
+4. **Manual authentication:**
+   ```bash
+   make connect
+   # Run qwen and follow the OAuth prompts
+   qwen --version
+   # Visit the URL shown, authorize in browser
+   # Press ESC once complete
    ```
 
 ### SSH Key Issues
@@ -418,9 +428,9 @@ make run-project project=my-app
    - 2000 tokens/day resets daily
    - Check current usage on Anthropic dashboard
 
-2. **Use API key (paid tier):**
+2. **Use API key (enterprise/paid users):**
    ```bash
-   export ANTHROPIC_API_KEY=sk-ant-api03-xxx
+   export QWEN_API_KEY=your-qwen-api-key
    make ansible  # Reconfigure VM
    ```
 

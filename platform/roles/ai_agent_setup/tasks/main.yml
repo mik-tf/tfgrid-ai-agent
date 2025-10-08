@@ -55,7 +55,7 @@
 - name: Configure Qwen API key if provided
   lineinfile:
     path: /root/.bashrc
-    line: 'export ANTHROPIC_API_KEY="{{ qwen_api_key }}"'
+    line: 'export QWEN_API_KEY="{{ qwen_api_key }}"'
     create: yes
   when: qwen_api_key != ''
   no_log: yes

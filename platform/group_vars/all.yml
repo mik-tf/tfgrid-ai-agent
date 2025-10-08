@@ -16,7 +16,8 @@ ai_agent_path: /opt/ai-agent
 nodejs_version: "20"
 
 # Optional: Qwen API key (if using paid tier)
-qwen_api_key: "{{ lookup('env', 'ANTHROPIC_API_KEY') | default('', true) }}"
+# Note: Qwen CLI uses OAuth by default. API key is optional for enterprise/paid usage.
+qwen_api_key: "{{ lookup('env', 'QWEN_API_KEY') | default('', true) }}"
 
 # Optional: GitHub personal access token (for automated git push)
 github_token: "{{ lookup('env', 'GITHUB_TOKEN') | default('', true) }}"

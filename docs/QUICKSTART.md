@@ -58,19 +58,19 @@ This deploys VM, sets up WireGuard, and configures everything.
 ### Step 4: Login to Qwen (30 seconds)
 
 ```bash
-make login-qwen
+make login
 ```
 
-Follow prompts to authenticate with Google (2000 free tokens/day).
+Follow prompts to authenticate with your Qwen account (OAuth authentication).
 
 ### Step 5: Create and Run Project (1 minute)
 
 ```bash
 # Create project
-make create-project project=my-first-app
+make create project=my-first-app
 
 # Start AI agent
-make run-project project=my-first-app
+make run project=my-first-app
 ```
 
 **Done!** The agent is now coding on your TFGrid VM. 🎉
@@ -81,14 +81,14 @@ make run-project project=my-first-app
 
 ```bash
 # In another terminal
-make monitor-project project=my-first-app
+make monitor project=my-first-app
 ```
 
 ### Setup Git Remote (Optional)
 
 ```bash
 # Show git SSH key
-make git-show-key
+make git-key
 
 # Add to GitHub: https://github.com/settings/keys
 
@@ -111,7 +111,7 @@ tail -f agent-output.log
 ### Stop AI agent
 
 ```bash
-make stop-project project=my-first-app
+make stop project=my-first-app
 ```
 
 ## Installation
@@ -162,15 +162,15 @@ make ping            # Test connectivity
 make wg              # Setup WireGuard
 
 # Agent Operations
-make login-qwen                      # Login to Qwen
-make create-project project=<name>   # Create project
-make run-project project=<name>      # Start AI agent
-make monitor-project project=<name>  # Monitor progress
-make stop-project project=<name>     # Stop AI agent
-make list-projects                   # List projects
+make login                      # Login to Qwen
+make create project=<name>      # Create project
+make run project=<name>         # Start AI agent
+make monitor project=<name>     # Monitor progress
+make stop project=<name>        # Stop AI agent
+make list                       # List projects
 
 # Git
-make git-show-key                         # Show SSH key
+make git-key                              # Show SSH key
 make git-setup project=<name> provider=<github|gitea|gitlab>
 ```
 
@@ -184,13 +184,13 @@ make ping
 
 **Qwen not authenticated?**
 ```bash
-make login-qwen
+make login
 ```
 
 **Project not found?**
 ```bash
-make list-projects
-make create-project project=my-app
+make list
+make create project=my-app
 ```
 
 See [TROUBLESHOOTING.md](TROUBLESHOOTING.md) for more solutions.

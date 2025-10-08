@@ -431,8 +431,8 @@ export GITEA_USER="myusername"
 # Mnemonic (required)
 set -x TF_VAR_mnemonic (cat ~/.config/threefold/mnemonic)
 
-# API Key (optional, only if using paid tier)
-set -x ANTHROPIC_API_KEY (cat ~/.config/anthropic/api_key)
+# API Key (optional, only if using enterprise/paid tier)
+set -x QWEN_API_KEY (cat ~/.config/qwen/api_key)
 ```
 
 ### VM Resources
@@ -583,7 +583,7 @@ Copyright 2025 ThreeFold
 - **tfgrid-gateway** - Infrastructure template
 - **ai-agent** - AI automation framework
 - **ThreeFold Grid** - Decentralized cloud infrastructure
-- **Anthropic Qwen** - AI coding assistant
+- **Qwen (Alibaba Cloud)** - AI coding assistant
 
 ## Links
 

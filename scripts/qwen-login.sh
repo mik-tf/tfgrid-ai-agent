@@ -36,12 +36,41 @@ fi
 
 cd ..
 
-echo "🔐 Launching Qwen CLI on AI agent VM"
-echo "===================================="
+echo "🔐 Qwen Authentication Setup"
+echo "============================="
 echo ""
-echo "This will open an interactive Qwen session."
-echo "Authentication will happen automatically on first use."
-echo "Press Ctrl+D or type 'exit' to close the session."
+echo "First, let's check if Qwen is already authenticated..."
+echo ""
+
+# Check if Qwen is already authenticated by testing a simple command
+if ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null \
+    root@$VM_IP "timeout 5 qwen --version" &>/dev/null; then
+    echo "✅ Qwen is already authenticated!"
+    echo ""
+    echo "Next steps:"
+    echo "  1. Create project: make create project=my-app"
+    echo "  2. Run AI agent: make run project=my-app"
+    exit 0
+fi
+
+echo "⚠️  Qwen needs to be authenticated on the VM."
+echo ""
+echo "This requires OAuth authentication through a web browser."
+echo "The process involves:"
+echo "  1. Qwen will display a URL and QR code"
+echo "  2. You visit the URL in your browser (or scan QR code)"
+echo "  3. Complete the OAuth authorization"
+echo "  4. Once done, press ESC to return"
+echo ""
+echo "IMPORTANT: This will open an interactive session."
+echo "If you see an authentication screen, complete it in your browser,"
+echo "then press ESC to exit once it shows 'Authorization successful'."
+echo ""
+read -p "Press Enter to continue (or Ctrl+C to cancel)..."
+echo ""
+
+echo "🔓 Starting Qwen authentication session..."
+echo "==========================================="
 echo ""
 
 # Use -t to allocate TTY for interactive session
@@ -49,11 +78,42 @@ echo ""
 ssh -t \
     -o StrictHostKeyChecking=no \
     -o UserKnownHostsFile=/dev/null \
-    root@$VM_IP "qwen"
+    root@$VM_IP "bash -c '
+        echo \"Testing Qwen CLI...\"
+        echo \"If you see an OAuth screen, follow the instructions and press ESC when done.\"
+        echo \"\"
+        timeout 300 qwen --version 2>&1 || true
+        echo \"\"
+        echo \"Authentication attempt completed.\"
+        echo \"Testing if Qwen is now working...\"
+        if timeout 5 qwen --version &>/dev/null; then
+            echo \"\"
+            echo \"✅ SUCCESS: Qwen is authenticated!\"
+        else
+            echo \"\"
+            echo \"⚠️  Authentication may not be complete.\"
+            echo \"You may need to run '\''make login'\'' again.\"
+        fi
+    '"
 
 echo ""
-echo "✅ Qwen session ended"
+echo "Authentication session ended."
 echo ""
-echo "Next steps:"
-echo "  1. Create project: make create project=my-app"
-echo "  2. Run AI agent: make run project=my-app"
+echo "Verifying authentication status..."
+
+if ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null \
+    root@$VM_IP "timeout 5 qwen --version" &>/dev/null; then
+    echo "✅ Qwen is now authenticated!"
+    echo ""
+    echo "Next steps:"
+    echo "  1. Create project: make create project=my-app"
+    echo "  2. Run AI agent: make run project=my-app"
+else
+    echo "⚠️  Authentication verification failed."
+    echo ""
+    echo "Troubleshooting:"
+    echo "  1. Try running 'make login' again"
+    echo "  2. Ensure you completed the OAuth flow in your browser"
+    echo "  3. Check VM internet connectivity: make connect, then ping 8.8.8.8"
+    echo "  4. Manual setup: make connect, then run 'qwen --version' and follow prompts"
+fi
