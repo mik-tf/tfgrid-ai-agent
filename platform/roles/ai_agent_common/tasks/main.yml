@@ -34,6 +34,12 @@
     value: "{{ git_user_email }}"
     scope: global
 
+- name: Configure git default branch
+  git_config:
+    name: init.defaultBranch
+    value: main
+    scope: global
+
 - name: Create workspace directory
   file:
     path: "{{ ai_agent_workspace }}"

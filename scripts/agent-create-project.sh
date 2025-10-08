@@ -2,13 +2,18 @@
 # Create a new agent project on the VM
 set -e
 
+echo "🚀 Creating agent project"
+echo "========================================="
+
+# Get project name from argument or prompt interactively
 PROJECT_NAME="$1"
+if [ -z "$PROJECT_NAME" ]; then
+    read -p "Enter project name: " PROJECT_NAME
+    echo ""
+fi
 
 if [ -z "$PROJECT_NAME" ]; then
-    echo "Usage: $0 <project-name>"
-    echo "Example: $0 my-app"
-    echo ""
-    echo "Or use: make create-project project=my-app"
+    echo "❌ Error: Project name is required"
     exit 1
 fi
 
@@ -61,24 +66,24 @@ fi
 echo "✅ Qwen is authenticated"
 
 # Check if project already exists
-if ssh -o StrictHostKeyChecking=no root@$VM_IP "test -d /opt/ai-agent-projects/$PROJECT_NAME" 2>/dev/null; then
+if ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null root@$VM_IP "test -d /opt/ai-agent-projects/$PROJECT_NAME" 2>/dev/null; then
     echo "❌ Error: Project '$PROJECT_NAME' already exists on VM"
     echo ""
     echo "Available projects:"
-    ssh -o StrictHostKeyChecking=no root@$VM_IP "ls -1 /opt/ai-agent-projects/ 2>/dev/null || echo '  (none)'"
+    ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null root@$VM_IP "ls -1 /opt/ai-agent-projects/ 2>/dev/null || echo '  (none)'"
     exit 1
 fi
 
 # Create project on VM
 echo "📝 Creating project on AI agent VM..."
-ssh -t -o StrictHostKeyChecking=no root@$VM_IP \
+ssh -t -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null root@$VM_IP \
     "cd /opt/ai-agent && make create PROJECT_NAME=$PROJECT_NAME"
 
 echo ""
 echo "✅ Project '$PROJECT_NAME' created successfully!"
 echo ""
 echo "🔑 Git SSH Key (add to GitHub/Gitea):"
-ssh -o StrictHostKeyChecking=no root@$VM_IP "cat /root/.ssh/id_ed25519_git.pub"
+ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null root@$VM_IP "cat /root/.ssh/id_ed25519_git.pub"
 echo ""
 echo "Next steps:"
 echo "  1. Add SSH key to GitHub: https://github.com/settings/keys"

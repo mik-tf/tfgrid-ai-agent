@@ -2,19 +2,24 @@
 # Run agent loop for a project on the VM
 set -e
 
+echo "🚀 Running agent project"
+echo "========================================="
+
 # Load .env to get network preference
 if [ -f .env ]; then
     source .env
 fi
 CONNECTIVITY_NETWORK="${CONNECTIVITY_NETWORK:-wireguard}"
 
+# Get project name from argument or prompt interactively
 PROJECT_NAME="$1"
+if [ -z "$PROJECT_NAME" ]; then
+    read -p "Enter project name: " PROJECT_NAME
+    echo ""
+fi
 
 if [ -z "$PROJECT_NAME" ]; then
-    echo "Usage: $0 <project-name>"
-    echo "Example: $0 my-app"
-    echo ""
-    echo "Or use: make run-project project=my-app"
+    echo "❌ Error: Project name is required"
     exit 1
 fi
 
@@ -50,11 +55,11 @@ echo "🚀 Starting agent loop for: $PROJECT_NAME"
 echo "=========================================="
 
 # Check if project exists
-if ! ssh -o StrictHostKeyChecking=no root@$VM_IP "test -d /opt/ai-agent-projects/$PROJECT_NAME" 2>/dev/null; then
+if ! ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null root@$VM_IP "test -d /opt/ai-agent-projects/$PROJECT_NAME" 2>/dev/null; then
     echo "❌ Error: Project '$PROJECT_NAME' not found on VM"
     echo ""
     echo "Available projects:"
-    ssh -o StrictHostKeyChecking=no root@$VM_IP "ls -1 /opt/ai-agent-projects/ 2>/dev/null || echo '  (none)'"
+    ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null root@$VM_IP "ls -1 /opt/ai-agent-projects/ 2>/dev/null || echo '  (none)'"
     echo ""
     echo "Create project: make create-project project=$PROJECT_NAME"
     exit 1
@@ -73,7 +78,7 @@ echo "✅ Qwen is authenticated"
 
 # Start agent loop on VM
 echo "📝 Starting agent loop on VM..."
-ssh -o StrictHostKeyChecking=no root@$VM_IP \
+ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null root@$VM_IP \
     "cd /opt/ai-agent && make run PROJECT_NAME=$PROJECT_NAME"
 
 echo ""

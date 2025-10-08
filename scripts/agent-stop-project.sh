@@ -2,19 +2,24 @@
 # Stop agent loop for a project on the VM
 set -e
 
+echo "🛑 Stopping agent project"
+echo "========================================="
+
 # Load .env to get network preference
 if [ -f .env ]; then
     source .env
 fi
 CONNECTIVITY_NETWORK="${CONNECTIVITY_NETWORK:-wireguard}"
 
+# Get project name from argument or prompt interactively
 PROJECT_NAME="$1"
+if [ -z "$PROJECT_NAME" ]; then
+    read -p "Enter project name: " PROJECT_NAME
+    echo ""
+fi
 
 if [ -z "$PROJECT_NAME" ]; then
-    echo "Usage: $0 <project-name>"
-    echo "Example: $0 my-app"
-    echo ""
-    echo "Or use: make stop-project project=my-app"
+    echo "❌ Error: Project name is required"
     exit 1
 fi
 
@@ -50,13 +55,13 @@ echo "🛑 Stopping agent loop for: $PROJECT_NAME"
 echo "=========================================="
 
 # Check if project exists
-if ! ssh -o StrictHostKeyChecking=no root@$VM_IP "test -d /opt/ai-agent-projects/$PROJECT_NAME" 2>/dev/null; then
+if ! ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null root@$VM_IP "test -d /opt/ai-agent-projects/$PROJECT_NAME" 2>/dev/null; then
     echo "❌ Error: Project '$PROJECT_NAME' not found on VM"
     exit 1
 fi
 
 # Stop agent loop
-ssh -o StrictHostKeyChecking=no root@$VM_IP \
+ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null root@$VM_IP \
     "cd /opt/ai-agent && make stop PROJECT_NAME=$PROJECT_NAME"
 
 echo ""
