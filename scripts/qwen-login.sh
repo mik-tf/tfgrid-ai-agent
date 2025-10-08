@@ -78,47 +78,57 @@ echo ""
 echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
 echo ""
 
-# Start qwen in background and capture the OAuth URL
-ssh -o LogLevel=ERROR -o StrictHostKeyChecking=no \
+# Run qwen with expect to handle interactive OAuth flow
+ssh -t -o LogLevel=ERROR -o StrictHostKeyChecking=no \
     -o UserKnownHostsFile=/dev/null \
-    root@$VM_IP 'rm -rf ~/.qwen && timeout 120 expect -c "
-set timeout 90
+    root@$VM_IP 'bash -c '\''
+# Clean previous auth
+rm -rf ~/.qwen
+
+# Use expect to automate the OAuth device flow
+expect <<END_EXPECT
+set timeout 120
 log_user 1
+
 spawn qwen
 expect {
-    \"Set Auth\" {
-        send \"\r\"
-        exp_continue
-    }
-    \"authorize\" {
-        # OAuth URL appeared - wait for user signal
-        expect timeout
+    "How would you like to authenticate" {
+        # Select option 1: Qwen OAuth
+        send "1\r"
+        
+        # Now wait for the OAuth URL to appear and keep the session alive
+        expect {
+            "authorize" {
+                # OAuth URL displayed, wait for user to complete in browser
+                # Display a clear prompt
+                puts "\n"
+                puts "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+                puts "✅ OAuth URL displayed above"
+                puts "Press ENTER in the OTHER terminal after completing OAuth..."
+                puts "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+                
+                # Keep this session alive for 2 minutes
+                sleep 120
+                send "\x03"
+            }
+            timeout {
+                puts "Timeout waiting for OAuth"
+                exit 1
+            }
+        }
     }
     timeout {
-        puts \"\\nTimeout waiting for OAuth flow\"
+        puts "Timeout waiting for qwen"
         exit 1
     }
 }
-" > /tmp/qwen_oauth.log 2>&1 &'
-
-# Give it a moment to start and display the OAuth info
-sleep 3
-
-# Show the OAuth output from the VM
-echo ""
-ssh -o LogLevel=ERROR -o StrictHostKeyChecking=no \
-    -o UserKnownHostsFile=/dev/null \
-    root@$VM_IP 'cat /tmp/qwen_oauth.log 2>/dev/null || true'
+END_EXPECT
+'\'''
 
 echo ""
 echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-read -p "Press ENTER after completing OAuth in your browser..."
+read -p "Press ENTER here after completing OAuth in your browser..."
 echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-
-# Kill the qwen process on the VM
-ssh -o LogLevel=ERROR -o StrictHostKeyChecking=no \
-    -o UserKnownHostsFile=/dev/null \
-    root@$VM_IP 'pkill -f "qwen" 2>/dev/null || true'
 
 echo ""
 echo "Authentication session ended."
