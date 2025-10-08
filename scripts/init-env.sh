@@ -149,7 +149,8 @@ cat >> .env <<EOF
 # Sensitive data (mnemonic, API keys) should NOT be in this file.
 # Set them as environment variables:
 #   set -x TF_VAR_mnemonic (cat ~/.config/threefold/mnemonic)
-#   set -x ANTHROPIC_API_KEY "your-api-key"  # Optional for Claude
+#   set -x GITHUB_TOKEN (cat ~/.config/threefold/github_token)      # Optional
+#   set -x QWEN_API_KEY (cat ~/.config/qwen/api_key)                # Optional (enterprise/paid only)
 EOF
 
 echo ""
@@ -158,14 +159,26 @@ echo ""
 echo "📋 Review your configuration:"
 cat .env | grep "^export" | sed 's/export /  /'
 echo ""
-echo "Next steps:"
-echo "  1. Set your TFGrid mnemonic (required):"
-echo "     set -x TF_VAR_mnemonic (cat ~/.config/threefold/mnemonic)"
+echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+echo "📋 Next Steps"
+echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
 echo ""
-echo "  2. Set GitHub token (optional - for automated git push from VM):"
-echo "     set -x GITHUB_TOKEN (cat ~/.config/threefold/github_token)"
+echo "1. Set your TFGrid mnemonic (REQUIRED):"
+echo "   set -x TF_VAR_mnemonic (cat ~/.config/threefold/mnemonic)"
 echo ""
-echo "  3. Deploy: make deploy"
+echo "2. (Optional) Set GitHub token - for automated git push from VM:"
+echo "   set -x GITHUB_TOKEN (cat ~/.config/threefold/github_token)"
+echo "   Note: Without this, you'll add VM's SSH key to GitHub manually (more secure)"
 echo ""
-echo "ℹ️  Note: Without GitHub token, you'll add VM's SSH key to GitHub manually"
+echo "3. (Optional) Set Qwen API key - only for enterprise/paid tier:"
+echo "   set -x QWEN_API_KEY (cat ~/.config/qwen/api_key)"
+echo "   💡 Most users DON'T need this! FREE tier uses OAuth (Google login)"
+echo ""
+echo "4. Deploy your VM:"
+echo "   make deploy"
+echo ""
+echo "5. Login to Qwen (FREE with OAuth):"
+echo "   make login"
+echo ""
+echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
 echo ""
