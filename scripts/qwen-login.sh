@@ -64,17 +64,19 @@ echo ""
 echo "🔓 Starting Qwen authentication session..."
 echo "==========================================="
 echo ""
-echo "👀 Watch for the authorization URL below..."
-echo "   Copy it and open in your browser!"
-echo ""
 
-# Use expect to automate the interactive OAuth menu selection
+# Clear instructions for the OAuth flow
 echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-echo "Starting Qwen OAuth flow..."
+echo "📋 What happens next:"
 echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
 echo ""
-echo "The OAuth URL will appear below."
-echo "COPY it and open in your LOCAL browser."
+echo "  1️⃣  An OAuth authorization URL will appear below"
+echo "  2️⃣  COPY the URL and open it in your LOCAL browser"
+echo "  3️⃣  Complete the Google OAuth login in your browser"
+echo "  4️⃣  After 60 seconds, this session will automatically close"
+echo "  5️⃣  Authentication status and next steps will be displayed"
+echo ""
+echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
 echo ""
 
 ssh -o StrictHostKeyChecking=no \
